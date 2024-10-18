@@ -4,8 +4,9 @@ const { createHandler } = require("graphql-http/lib/use/express")
 const { ruruHTML } = require("ruru/server")
 const { buildSchema } = require('graphql');
 
-const GRAPHQL_ROUTER = require('./graphql');
+// const GRAPHQL_ROUTER = require('./graphql');
 
+const events = [];
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -19,12 +20,27 @@ router.get("/graphiql", (_req, res) => {
 
 router.use('/graphql', createHandler({
   schema: buildSchema(`
+      type Event {
+        _id: ID!
+        title: String!
+        description: String!
+        price: Float!
+        date: String!
+      }
+
+      input EventInput {
+        title: String!
+        description: String!
+        price: Float!
+        date: String!
+      }
+
       type RootQuery {
-        events: [String!]!
+        events: [Event!]!
       }
 
       type RootMutation {
-        createEvent(name: String): String
+        createEvent(eventInput: EventInput): Event
       }
 
       schema {
@@ -34,11 +50,19 @@ router.use('/graphql', createHandler({
     `),
   rootValue: {
     events: () => {
-      return ["Midnight Riders Mini Concert", "Bookworms", "Team Bonding"];
+      return events;
     },
     createEvent: (args) => {
-      const eventName = args.name;
-      return eventName;
+      const event = {
+        _id: Math.random().toString(),
+        title: args.eventInput.title,
+        description: args.eventInput.description,
+        price: +args.eventInput.price,
+        date: new Date().toISOString(),
+      }
+
+      events.push(event);
+      return event;
     }
   },
   graphiql: true

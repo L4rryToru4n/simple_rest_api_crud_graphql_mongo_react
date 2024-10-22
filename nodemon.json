@@ -1,0 +1,7 @@
+{
+    "env": {
+        "MONGO_USER": "quickplayground",
+        "MONGO_PASSWORD": "B3JkCUqgOB6FGVYD",
+        "MONGO_DB": "mongo_graphql_react_dev"
+    }
+}

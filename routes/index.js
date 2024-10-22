@@ -1,12 +1,12 @@
 var express = require('express');
 var router = express.Router();
-const { createHandler } = require("graphql-http/lib/use/express")
-const { ruruHTML } = require("ruru/server")
+const { createHandler } = require("graphql-http/lib/use/express");
+const { ruruHTML } = require("ruru/server");
 const { buildSchema } = require('graphql');
 
-// const GRAPHQL_ROUTER = require('./graphql');
+const EventModel = require('../models/event');
 
-const events = [];
+// const GRAPHQL_ROUTER = require('./graphql');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -49,20 +49,36 @@ router.use('/graphql', createHandler({
       }
     `),
   rootValue: {
-    events: () => {
-      return events;
+    events: async () => {
+      try {
+        return await EventModel.find().lean();
+      }
+      catch(err) {
+        throw err;
+      }
     },
-    createEvent: (args) => {
-      const event = {
-        _id: Math.random().toString(),
+    createEvent: async (args) => {
+
+      const event = new EventModel({
         title: args.eventInput.title,
         description: args.eventInput.description,
         price: +args.eventInput.price,
-        date: new Date().toISOString(),
-      }
+        date: new Date(args.eventInput.date),
+      });
 
-      events.push(event);
-      return event;
+      try {
+        const createdEvent = await event.save();
+
+        let result = { ...createdEvent._doc };
+
+        console.log(result);
+        return result;
+
+      }
+      catch(err) {
+        console.log(err);
+        throw err;
+      }
     }
   },
   graphiql: true

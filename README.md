@@ -18,3 +18,45 @@ Referenced from [Redhat](https://www.redhat.com/en/topics/api/what-is-graphql) s
 Other than the main advantage of making query requests that gives data which is needed only, the advantage of using GraphQL API is that it can be used on top of existing REST API because it does not dictate a specific application architecture and allows an application API to evolve without breaking existing queries.
 
 While there is an advantage, there is one main disadvantage of using GraphQL API. There is a learning curve that must be familiarized in order to use its functionalities. Also, it shifts much of the work of data query to the server side. This can introduce more complexity for server developers. 
+
+
+## Tech Stack
+This project uses Node.js (Express.js), MongoDB (Mongoose) for storing and managing the data and GraphQL to query data requests. 
+
+## Instructions To Run The Application
+```
+npm run start
+```
+
+## GraphQL Queries To Tests The Application
+For getting an existing data
+```
+query {
+  events {
+    _id,
+    title,
+    desription
+  }
+}
+```
+![image](https://github.com/user-attachments/assets/6f653602-4df5-4bf9-b155-eccefd026e0b)
+
+For creating a new data
+```
+mutation {
+  createEvent(eventInput: {
+    title: "My #2 test title",
+    description: "My #2 test description",
+    price: 3.99,
+    date: "2024-10-22T04:49:47.698Z"
+  })
+  {
+    _id,
+    title,
+    description,
+    price,
+    date
+  }
+}
+```
+![image](https://github.com/user-attachments/assets/471290ff-42b7-4181-b032-f0028589eab2)

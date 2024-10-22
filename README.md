@@ -28,7 +28,7 @@ This project uses Node.js (Express.js), MongoDB (Mongoose) for storing and manag
 npm run start
 ```
 
-## GraphQL Queries To Tests The Application
+## GraphQL Queries To Test The Application
 For getting an existing data
 ```
 query {
